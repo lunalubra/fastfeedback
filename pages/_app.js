@@ -1,12 +1,37 @@
 import { ThemeProvider, CSSReset } from "@chakra-ui/core";
-import { AuthProvider } from "../lib/auth.js";
-import theme from "../styles/theme";
+import { Global, css } from "@emotion/core";
+
+import { AuthProvider } from "@/lib/auth.js";
+import customTheme from "@/styles/theme";
+
+const GlobalStyle = ({ children }) => {
+    return (
+        <>
+            <CSSReset />
+            <Global
+                styles={css`
+                    html {
+                        min-width: 360px;
+                        scroll-behavior: smooth;
+                    }
+
+                    #__next {
+                        display: flex;
+                        flex-direction: column;
+                        min-height: 100vh;
+                    }
+                `}
+            />
+            {children}
+        </>
+    );
+};
 
 function MyApp({ Component, pageProps }) {
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={customTheme}>
             <AuthProvider>
-                <CSSReset />
+                <GlobalStyle />
                 <Component {...pageProps} />
             </AuthProvider>
         </ThemeProvider>

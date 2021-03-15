@@ -1,27 +1,47 @@
 import Head from "next/head";
-import { useAuth } from "../lib/auth";
+import { Flex, Button, Code, Icon, Text } from "@chakra-ui/core";
+
+import { useAuth } from "@/lib/auth";
+import EmptyState from "@/components/EmptyState";
 
 export default function Home() {
     const auth = useAuth();
-    console.log(auth.user);
 
     return (
-        <div>
-            <main>
-                <h1>Fast Feedback</h1>
+        <Flex
+            as="main"
+            direction="column"
+            align="center"
+            justify="center"
+            h="100vh"
+        >
+            <Head>
+                <title>Fast Feedback</title>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                        if (document.cookie && document.cookie.includes('homa-auth')) {
+                            window.location.href = "/dashboard"
+                        }
+                    `,
+                    }}
+                />
+            </Head>
 
-                <p>
-                    Get started by editing <code>pages/index.js</code>
-                </p>
-                {auth.user ? (
-                    <button onClick={(e) => auth.signout()}>Sign out</button>
-                ) : (
-                    <button onClick={(e) => auth.signinWithGithub()}>
-                        Sign in
-                    </button>
-                )}
-                <div>{auth?.user?.email}</div>
-            </main>
-        </div>
+            <Icon name="logo" size="64px" />
+            {auth.user ? (
+                <Button as="a" href="/dashboard">
+                    View dashboard
+                </Button>
+            ) : (
+                <Button
+                    mt={4}
+                    size="sm"
+                    onClick={(e) => auth.signinWithGithub()}
+                >
+                    Sign in
+                </Button>
+            )}
+        </Flex>
     );
 }
